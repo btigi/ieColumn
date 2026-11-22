@@ -162,4 +162,4 @@ A column can be set as `"enabled": false` to hide it without deleting it from th
 
 ieColumn is licenced under the GPL 2.0 License. Full licence details are available in licence.md
 
-JSON parsing uses the vendored [nlohmann/json](https://github.com/nlohmann/json) single header (`third_party/nlohmann/json.hpp`), which is MIT licensed.
+JSON parsing uses [nlohmann/json](https://github.com/nlohmann/json) licensed under MIT.
