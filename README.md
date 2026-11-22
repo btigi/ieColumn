@@ -86,10 +86,37 @@ Each column needs an `id`, a display `label`, a unique `propId` (2 or greater), 
 | `strref` | `dialog.tlk` text for a u32 string reference, or the number if the TLK cannot be read |
 | `enum` | label from the column's `enum` table, or the raw number if it is missing |
 
+`type` can be omitted when `valueType` is already a width (e.g. `u32`, `resref`). `enum` rules must set `type`.
+
 `strref` columns use the same `%ieshellex%\config\tlkLocations.xml` file as [ieshellex](https://github.com/btigi/ieshellex).
 The longest `ApplyPath` contained in the item's directory selects `TlkPath`.
 
-`type` can be omitted when `valueType` is already a width (e.g. `u32`, `resref`). `enum` rules must set `type`.
+A sample `tlkLocations.xml` file is below:
+
+```
+<ArrayOfTlkLocationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TlkLocationData>
+    <TlkPath>D:\Games\ie\bg1\dialog.tlk</TlkPath>
+    <ApplyPath>D:\Games\ie\bg1</ApplyPath>
+  </TlkLocationData>
+  <TlkLocationData>
+    <TlkPath>D:\Games\ie\bg2ee\lang\en_US\dialog.tlk</TlkPath>
+    <ApplyPath>D:\Games\ie\bg2ee</ApplyPath>
+  </TlkLocationData>
+  <TlkLocationData>
+    <TlkPath>D:\Games\ie\bg2ee\lang\en_US\dialog.tlk</TlkPath>
+    <ApplyPath>C:\</ApplyPath>
+  </TlkLocationData>
+  <TlkLocationData>
+    <TlkPath>D:\Games\ie\bg2ee\lang\en_US\dialog.tlk</TlkPath>
+    <ApplyPath>D:\</ApplyPath>
+  </TlkLocationData>
+  <TlkLocationData>
+    <TlkPath>D:\Games\ie\bg2ee\lang\en_US\dialog.tlk</TlkPath>
+    <ApplyPath>X:\</ApplyPath>
+  </TlkLocationData>
+</ArrayOfTlkLocationData>
+```
 
 ### absolute
 
