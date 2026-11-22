@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/ieColumn.schema.json",
+  "title": "ieColumn Explorer columns",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["handlers"],
+  "properties": {
+    "handlers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/handler" }
+    }
+  },
+  "$defs": {
+    "guid": {
+      "type": "string",
+      "pattern": "^\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\}$"
+    },
+    "handler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "extensions", "formatId", "columns"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+        "extensions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^\\.[A-Za-z0-9_]+$" }
+        },
+        "formatId": { "$ref": "#/$defs/guid" },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["offset", "bytes"],
+          "properties": {
+            "offset": { "$ref": "#/$defs/offset" },
+            "bytes": { "type": "string", "pattern": "^([0-9A-Fa-f]{2}){1,64}$" }
+          }
+        },
+        "columns": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/column" }
+        }
+      }
+    },
+    "scalarType": {
+      "type": "string",
+      "enum": ["u8", "i8", "u16", "i16", "u32", "i32", "resref"]
+    },
+    "offset": {
+      "oneOf": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "string", "pattern": "^(0[xX][0-9A-Fa-f]+|[0-9]+)$" }
+      ]
+    },
+    "absolute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "offset"],
+      "properties": {
+        "kind": { "const": "absolute" },
+        "offset": { "$ref": "#/$defs/offset" },
+        "type": { "$ref": "#/$defs/scalarType" }
+      }
+    },
+    "indirect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "baseOffset", "stride", "fieldOffset"],
+      "properties": {
+        "kind": { "const": "indirect" },
+        "baseOffset": { "$ref": "#/$defs/offset" },
+        "index": { "$ref": "#/$defs/offset" },
+        "stride": { "$ref": "#/$defs/offset" },
+        "fieldOffset": { "$ref": "#/$defs/offset" },
+        "type": { "$ref": "#/$defs/scalarType" }
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "template", "fields"],
+      "properties": {
+        "kind": { "const": "format" },
+        "template": { "type": "string" },
+        "fields": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/rule" },
+          "minProperties": 1
+        }
+      }
+    },
+    "flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "bits"],
+      "properties": {
+        "kind": { "const": "flags" },
+        "offset": { "$ref": "#/$defs/offset" },
+        "baseOffset": { "$ref": "#/$defs/offset" },
+        "index": { "$ref": "#/$defs/offset" },
+        "stride": { "$ref": "#/$defs/offset" },
+        "fieldOffset": { "$ref": "#/$defs/offset" },
+        "type": { "$ref": "#/$defs/scalarType" },
+        "bits": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "minProperties": 1
+        }
+      }
+    },
+    "rule": {
+      "oneOf": [
+        { "$ref": "#/$defs/absolute" },
+        { "$ref": "#/$defs/indirect" },
+        { "$ref": "#/$defs/format" },
+        { "$ref": "#/$defs/flags" }
+      ]
+    },
+    "column": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "propId", "valueType", "rule"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+        "label": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "propId": { "type": "integer", "minimum": 2 },
+        "enabled": { "type": "boolean" },
+        "valueType": {
+          "type": "string",
+          "enum": ["u8", "i8", "u16", "i16", "u32", "i32", "resref", "string", "enum", "strref"]
+        },
+        "rule": { "$ref": "#/$defs/rule" },
+        "enum": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    }
+  }
+}

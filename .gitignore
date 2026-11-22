@@ -1,0 +1,33 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# MSBuild
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+Win32/
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.ilk
+*.idb
+*.meta
+*.tlog
+*.recipe
+*.log
+*.exp
+*.lib
+*.lastbuildstate
+
+# Generated at registration, beside the DLL
+*.propdesc

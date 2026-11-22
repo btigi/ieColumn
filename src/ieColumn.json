@@ -1,0 +1,263 @@
+// This file must sit next to ieColumn.dll, unless
+// HKLM\SOFTWARE\InfinityEngine\ieColumn\ConfigPath points elsewhere.
+//
+// handlers: one block per file type
+// formatId, optional magic-byte signature and columns.
+// absolute: read a field at a fixed file offset.
+// indirect: read a u32 pointer at baseOffset, then a field at base + index * stride + fieldOffset.
+// format:   build a string from named fields.
+// flags:    turn set bits into a comma-separated list.
+// strref:   read a u32 dialog.tlk index and show its text.
+//           The TLK file is chosen from %ieshellex%\config\tlkLocations.xml
+//           Failed lookups show the raw strref value
+//
+// Re-run regsvr32 after adding, removing, relabeling, or changing valueType,
+// or after changing extensions or signatures.
+// Offset-only edits are picked up the next time Explorer reads a file.
+{
+  "handlers": [
+    {
+      "id": "Itm",
+      "extensions": [".itm"],
+      "formatId": "{22636144-03FD-4EC5-92E8-693E5983F5FA}",
+      "signature": { "offset": 0, "bytes": "49544D2056" },
+      "columns": [
+    {
+      "id": "ItemType",
+      "label": "Item type",
+      "propId": 100,
+      "valueType": "enum",
+      "rule": { "kind": "absolute", "offset": "0x1C", "type": "u16" },
+      "enum": {
+        "0": "Books/misc",
+        "1": "Amulets and necklaces",
+        "2": "Armor",
+        "3": "Belts and girdles",
+        "4": "Boots",
+        "5": "Arrows",
+        "6": "Bracers and gauntlets",
+        "7": "Headgear",
+        "8": "Keys",
+        "9": "Potions",
+        "10": "Rings",
+        "11": "Scrolls",
+        "12": "Shields",
+        "13": "Food",
+        "14": "Bullets",
+        "15": "Bows",
+        "16": "Daggers",
+        "17": "Maces",
+        "18": "Slings",
+        "19": "Small swords",
+        "20": "Large swords",
+        "21": "Hammers",
+        "22": "Morning stars",
+        "23": "Flails",
+        "24": "Darts",
+        "25": "Axes",
+        "26": "Quarterstaff",
+        "27": "Crossbow",
+        "28": "Hand-to-hand",
+        "29": "Spears",
+        "30": "Halberds",
+        "31": "Crossbow bolts",
+        "32": "Cloaks and robes",
+        "33": "Gold pieces",
+        "34": "Gems",
+        "35": "Wands",
+        "36": "Containers/eye/broken armor",
+        "37": "Books/broken shields/bracelets",
+        "38": "Familiars/broken swords/earrings",
+        "39": "Tattoos",
+        "40": "Lenses",
+        "41": "Bucklers/teeth",
+        "42": "Candles",
+        "44": "Clubs",
+        "47": "Large shields",
+        "49": "Medium shields",
+        "50": "Notes",
+        "53": "Small shields",
+        "55": "Telescopes",
+        "56": "Drinks",
+        "57": "Great swords",
+        "58": "Container",
+        "59": "Fur/pelt",
+        "60": "Leather armor",
+        "61": "Studded leather armor",
+        "62": "Chain mail",
+        "63": "Splint mail",
+        "64": "Half plate",
+        "65": "Full plate",
+        "66": "Hide armor",
+        "67": "Robe",
+        "69": "Bastard sword",
+        "70": "Scarf",
+        "71": "Food",
+        "72": "Hat",
+        "73": "Gauntlet"
+      }
+    },
+    {
+      "id": "Price",
+      "label": "Price",
+      "propId": 101,
+      "valueType": "u32",
+      "rule": { "kind": "absolute", "offset": "0x34" }
+    },
+    {
+      "id": "Weight",
+      "label": "Weight",
+      "propId": 102,
+      "valueType": "u32",
+      "rule": { "kind": "absolute", "offset": "0x4C" }
+    },
+    {
+      "id": "Enchantment",
+      "label": "Enchantment",
+      "propId": 103,
+      "valueType": "i32",
+      "rule": { "kind": "absolute", "offset": "0x60" }
+    },
+    {
+      "id": "Stack",
+      "label": "Stack amount",
+      "propId": 104,
+      "valueType": "u16",
+      "rule": { "kind": "absolute", "offset": "0x38" }
+    },
+    {
+      "id": "Lore",
+      "label": "Lore to ID",
+      "propId": 105,
+      "valueType": "u16",
+      "rule": { "kind": "absolute", "offset": "0x42" }
+    },
+    {
+      "id": "AbilityCount",
+      "label": "Ability count",
+      "propId": 106,
+      "valueType": "u16",
+      "rule": { "kind": "absolute", "offset": "0x68" }
+    },
+    {
+      "id": "Flags",
+      "label": "Flags",
+      "propId": 107,
+      "valueType": "string",
+      "rule": {
+        "kind": "flags",
+        "offset": "0x18",
+        "type": "u32",
+        "bits": {
+          "0": "Critical",
+          "1": "Two-handed",
+          "2": "Droppable",
+          "3": "Displayable",
+          "4": "Cursed",
+          "5": "Cannot scribe",
+          "6": "Magical",
+          "7": "Left-handed",
+          "8": "Silver",
+          "9": "Cold iron",
+          "10": "Stolen",
+          "11": "Conversable"
+        }
+      }
+    },
+    {
+      "id": "UnidentifiedName",
+      "label": "Unidentified name",
+      "description": "Unidentified name from dialog.tlk",
+      "propId": 108,
+      "valueType": "strref",
+      "rule": { "kind": "absolute", "offset": "0x08" }
+    },
+    {
+      "id": "IdentifiedName",
+      "label": "Identified name",
+      "description": "Identified name from dialog.tlk",
+      "propId": 109,
+      "valueType": "strref",
+      "rule": { "kind": "absolute", "offset": "0x0C" }
+    },
+    {
+      "id": "UnidentifiedDescription",
+      "label": "Unidentified description",
+      "description": "Unidentified description from dialog.tlk",
+      "propId": 112,
+      "valueType": "strref",
+      "rule": { "kind": "absolute", "offset": "0x50" }
+    },
+    {
+      "id": "IdentifiedDescription",
+      "label": "Identified description",
+      "description": "Identified description from dialog.tlk",
+      "propId": 113,
+      "valueType": "strref",
+      "rule": { "kind": "absolute", "offset": "0x54" }
+    },
+    {
+      "id": "InventoryIcon",
+      "label": "Inventory icon",
+      "propId": 110,
+      "valueType": "resref",
+      "rule": { "kind": "absolute", "offset": "0x3A" }
+    },
+    {
+      "id": "Damage",
+      "label": "Damage",
+      "description": "Damage dice of ability header 0",
+      "propId": 111,
+      "valueType": "string",
+      "rule": {
+        "kind": "format",
+        "template": "{dice}d{sides}+{bonus}",
+        "fields": {
+          "dice": { "kind": "indirect", "baseOffset": "0x64", "index": 0, "stride": 56, "fieldOffset": "0x18", "type": "u8" },
+          "sides": { "kind": "indirect", "baseOffset": "0x64", "index": 0, "stride": 56, "fieldOffset": "0x16", "type": "u8" },
+          "bonus": { "kind": "indirect", "baseOffset": "0x64", "index": 0, "stride": 56, "fieldOffset": "0x1A", "type": "i16" }
+        }
+      }
+    }
+    ]
+    },
+    {
+      "id": "Spl",
+      "extensions": [".spl"],
+      "formatId": "{A4E8C1D2-6B70-4F93-8E15-3C9D7A2B6F04}",
+      "signature": { "offset": 0, "bytes": "53504C2056" },
+      "columns": [
+        {
+          "id": "Name",
+          "label": "Spell name",
+          "description": "Unidentified spell name from dialog.tlk (header 0x08)",
+          "propId": 100,
+          "valueType": "strref",
+          "rule": { "kind": "absolute", "offset": "0x08" }
+        },
+        {
+          "id": "Level",
+          "label": "Spell level",
+          "description": "Spell level (header 0x34)",
+          "propId": 101,
+          "valueType": "u32",
+          "rule": { "kind": "absolute", "offset": "0x34" }
+        },
+        {
+          "id": "CastingTime",
+          "label": "Casting time",
+          "description": "Casting time of extended header 0, in tenths of a round",
+          "propId": 102,
+          "valueType": "u16",
+          "rule": {
+            "kind": "indirect",
+            "baseOffset": "0x64",
+            "index": 0,
+            "stride": "0x28",
+            "fieldOffset": "0x12"
+          }
+        }
+      ]
+    }
+  ]
+}
